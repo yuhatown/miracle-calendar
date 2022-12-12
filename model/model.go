@@ -1,4 +1,4 @@
-package db
+package model
 
 import (
 	"database/sql"
@@ -10,7 +10,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func GetMain() {
+func GetRoutine() {
 	err := godotenv.Load(".env")
 	if err != nil {
   		log.Fatal("Error loading .env file")
@@ -31,7 +31,7 @@ func GetMain() {
 	fmt.Println(cal)
 }
 
-func PostMain(routine, memo string) {
+func PostRoutine(routine, memo string) {
 	err := godotenv.Load(".env")
 	if err != nil {
   		log.Fatal("Error loading .env file")
@@ -43,13 +43,15 @@ func PostMain(routine, memo string) {
 	}
 	defer db.Close()
 
+	
+
 	err = db.QueryRow("INSERT INTO test(date, routine, memo, is_achieved)) VALUES (now(), ?, ?,0)", routine, memo)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func PutMain(routine, memo string, is_achieved, id int) {
+func PutRoutine(routine, memo string, is_achieved, id int) {
 	err := godotenv.Load(".env")
 	if err != nil {
   		log.Fatal("Error loading .env file")
@@ -65,10 +67,9 @@ func PutMain(routine, memo string, is_achieved, id int) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
 
-func DeleteMain() {
+func DeleteRoutine(id int) {
 	err := godotenv.Load(".env")
 	if err != nil {
   		log.Fatal("Error loading .env file")
@@ -80,4 +81,8 @@ func DeleteMain() {
 	}
 	defer db.Close()
 
+	err = db.QueryRow("DELETE FROM test WHERE id=?", id)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
