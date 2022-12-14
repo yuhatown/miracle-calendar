@@ -3,8 +3,7 @@ package model
 import (
 	"fmt"
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
+	
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/joho/godotenv"
 )
