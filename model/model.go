@@ -11,13 +11,18 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func GetRoutine() {
+func ConnectDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	return db, err
+}
+
+func GetRoutine() {
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("SELECT date FROM routine").Scan(&cal)
@@ -28,11 +33,7 @@ func GetRoutine() {
 }
 
 func PostRoutine(routine, memo string) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("INSERT INTO routine(date, todo, memo, is_achieved)) VALUES (now(), ?, ?,0)", routine, memo).Scan(&cal)
@@ -43,11 +44,7 @@ func PostRoutine(routine, memo string) {
 }
 
 func PutRoutine(routine, memo string, is_achieved, id int) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("UPDATE routine SET todo=?, memo=?, is_achieved=? WHERE id=?", routine, memo, is_achieved, id).Scan(&cal)
@@ -58,11 +55,7 @@ func PutRoutine(routine, memo string, is_achieved, id int) {
 }
 
 func DeleteRoutine(id int) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("DELETE FROM routine WHERE id=?", id).Scan(&cal)
@@ -73,11 +66,7 @@ func DeleteRoutine(id int) {
 }
 
 func GetUser() {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("SELECT * FROM user").Scan(&cal)
@@ -88,11 +77,7 @@ func GetUser() {
 }
 
 func PostUser(name string) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()	
+	db, err := ConnectDB()	
 
 	var cal [6]string
 	err = db.QueryRow("INSERT INTO user(name) VALUES (?)", name).Scan(&cal)
@@ -103,11 +88,7 @@ func PostUser(name string) {
 }
 
 func PutUser(name string, id int) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("UPDATE user SET name=? WHERE id=?", name, id).Scan(&cal)
@@ -118,11 +99,7 @@ func PutUser(name string, id int) {
 }
 
 func DeleteUser(id int) {
-	db, err := sql.Open("mysql", os.Getenv("DATA_SOURCE_NAME"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db, err := ConnectDB()
 
 	var cal [6]string
 	err = db.QueryRow("DELETE FROM user WHERE id=?", id).Scan(&cal)
