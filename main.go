@@ -1,8 +1,7 @@
 package main
 
 import (
-	"miracle-calendar/model"
-	"miracle/miracle-calendar/model"
+	"miracle-calendar/app"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -11,15 +10,15 @@ import (
 
 func main() {
 	mux := chi.NewRouter()
-	mux.Get("/routine", model.GetRoutine)
-	mux.Post("/routine", model.PostRoutine)
-	mux.Put("/routine/:id", model.PutRoutine)
-	mux.Delete("routine/:id", model.DeleteRoutine)
+	mux.Get("/routine", app.getRoutineHandler)
+	mux.Post("/routine", app.postRoutineHandler)
+	mux.Put("/routine/:id", app.putRoutineHandler)
+	mux.Delete("routine/:id", app.deleteRoutineHandler)
 
-	mux.Get("/user", model.GetUser)
-	mux.Post("/user", model.PostUser)
-	mux.Put("/user/:id", model.PutUser)
-	mux.Delete("/user/:id", model.DeleteUser)
+	mux.Get("/user", app.getUserHandler)
+	mux.Post("/user", app.postUserHandler)
+	mux.Put("/user/:id", app.putUserHandler)
+	mux.Delete("/user/:id", app.deleteUserHandler)
 
 	http.ListenAndServe(":8080", mux)	
 }
